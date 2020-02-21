@@ -7,16 +7,19 @@ Vagrant.require_version '>= 1.4.3'
 VAGRANTFILE_API_VERSION = '2'.freeze
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    ##config.vm.network "private_network", ip: "172.17.0.3"
+    ##config.vm.synced_folder "/home/csr/DAB/dabdata", "/host_dabdata"
     config.vm.provider "docker" do |d|
 	    d.image = "nishidayuya/docker-vagrant-ubuntu:xenial"
 	    d.has_ssh = true
-	    d.ports = ["8088:8088","8080:8080","9083:9083","4040:4040","8888:8888","16010:16010"]
+	    d.ports = ["8088:8088","8080:8080","9083:9083","4040:4040","8888:8888","16010:16010", "8020:8020", "8032:8032"]
+	    ##d.volumes = ["/vagrant/dabdata:/dabdata"]
     end
     config.vm.provider "virtualbox" do |v, override|
 	    override.vm.box = "ubuntu/xenial64"
 	    v.gui = false
 	    v.name = "node1"
-            v.customize ['modifyvm', :id, '--memory', '8192']
+        v.customize ['modifyvm', :id, '--memory', '8192']
     end
     config.vm.network "forwarded_port", guest: 8080, host: 8080
     config.vm.network "forwarded_port", guest: 8088, host: 8088
