@@ -63,15 +63,16 @@ public class CDXCountAnalyser extends Configured implements Tool {
         System.setProperty("HADOOP_USER_NAME", "vagrant");
         //Configuration conf = getConf();
         Configuration conf = new Configuration();
-        conf.set("yarn.resourcemanager.address", "172.17.0.3:8032");
+        conf.set("yarn.resourcemanager.address", "node1:8032");
         conf.set("mapreduce.framework.name", "yarn");
+        conf.set("mapreduce.jobtracker.address", "node1");
         conf.set("fs.defaultFS", "hdfs://172.17.0.3:8020");
-        conf.set("hadoop.job.ugi", "vagrant");
-        conf.set("yarn.application.classpath",
+        //conf.set("hadoop.job.ugi", "vagrant");
+        /*conf.set("yarn.application.classpath",
                      "$HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/*,$HADOOP_COMMON_HOME/lib/*,"
                         + "$HADOOP_HDFS_HOME/*,$HADOOP_HDFS_HOME/lib/*,"
                         + "$HADOOP_YARN_HOME/*,$HADOOP_YARN_HOME/lib/*,"
-                        + "$HADOOP_MAPRED_HOME/*,$HADOOP_MAPRED_HOME/lib/*");
+                        + "$HADOOP_MAPRED_HOME/*,$HADOOP_MAPRED_HOME/lib/*"); */
         File file = new File("target/CDXCountAnalyser-1.0-SNAPSHOT-jar-with-dependencies.jar");
         conf.set("mapreduce.job.jar", file.getAbsolutePath());
         //See https://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
@@ -82,7 +83,7 @@ public class CDXCountAnalyser extends Configured implements Tool {
             org.apache.hadoop.fs.LocalFileSystem.class.getName()
         );
         Job job = new Job(conf, "CDX Count Analysis");
-        job.setJarByClass(CDXCountAnalyser.class);
+        job.setJarByClass(this.getClass());
 
         int n = args.length;
         if (n > 0)
