@@ -18,7 +18,8 @@ import java.io.IOException;
 
 /**
  * This job counts the number of cdx records pointing to every arc- or warc-file in a given collection of
- * cdx files.
+ * cdx files. Here we are just using it as a test class so give it some input files with lines that end "foobar.warc"
+ * etc. or just feed it some real cdx files.
  */
 public class CDXCountAnalyser extends Configured implements Tool {
 
@@ -60,12 +61,12 @@ public class CDXCountAnalyser extends Configured implements Tool {
     }
 
     public int run(String[] args) throws Exception {
-        System.setProperty("HADOOP_USER_NAME", "vagrant");
+        System.setProperty("HADOOP_USER_NAME", "vagrant");  //Not sure if this is necessary
         //Configuration conf = getConf();
         Configuration conf = new Configuration();
         conf.set("yarn.resourcemanager.address", "node1:8032");
         conf.set("mapreduce.framework.name", "yarn");
-        conf.set("mapreduce.jobtracker.address", "node1");
+        conf.set("mapreduce.jobtracker.address", "node1");   //Not sure if this is necessary
         conf.set("fs.defaultFS", "hdfs://172.17.0.3:8020");
         //conf.set("hadoop.job.ugi", "vagrant");
         /*conf.set("yarn.application.classpath",
@@ -73,15 +74,19 @@ public class CDXCountAnalyser extends Configured implements Tool {
                         + "$HADOOP_HDFS_HOME/*,$HADOOP_HDFS_HOME/lib/*,"
                         + "$HADOOP_YARN_HOME/*,$HADOOP_YARN_HOME/lib/*,"
                         + "$HADOOP_MAPRED_HOME/*,$HADOOP_MAPRED_HOME/lib/*"); */
+        //Why do we need the jar with dependencies? Shouldn't we be able to specify the provided dependencies (as commented
+        //out above) and then just give the minimal jarfile? This could be important performance-wise in a final version
         File file = new File("target/CDXCountAnalyser-1.0-SNAPSHOT-jar-with-dependencies.jar");
         conf.set("mapreduce.job.jar", file.getAbsolutePath());
-        //See https://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
+        //For below see https://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
+        //but still need to check that this is necessary.
         conf.set("fs.hdfs.impl",
             org.apache.hadoop.hdfs.DistributedFileSystem.class.getName()
         );
         conf.set("fs.file.impl",
             org.apache.hadoop.fs.LocalFileSystem.class.getName()
         );
+        //Deprecated method. How should we really do this?
         Job job = new Job(conf, "CDX Count Analysis");
         job.setJarByClass(this.getClass());
 
