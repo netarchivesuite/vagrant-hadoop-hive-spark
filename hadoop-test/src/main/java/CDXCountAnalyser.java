@@ -67,7 +67,7 @@ public class CDXCountAnalyser extends Configured implements Tool {
         conf.set("yarn.resourcemanager.address", "node1:8032");
         conf.set("mapreduce.framework.name", "yarn");
         conf.set("mapreduce.jobtracker.address", "node1");   //Not sure if this is necessary
-        conf.set("fs.defaultFS", "hdfs://172.17.0.3:8020");
+        conf.set("fs.defaultFS", "hdfs://node1:8020");
         //conf.set("hadoop.job.ugi", "vagrant");
         /*conf.set("yarn.application.classpath",
                      "$HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/*,$HADOOP_COMMON_HOME/lib/*,"
