@@ -90,9 +90,18 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <!--
+                            The following line is crucial. Without it, the build creates a services directory that only contains a definition
+                            for LocalClientProtocolProvider, and omits YarnClientProtocolProvider. This is also what happens if you use the maven
+                            assembly plugin. With the following line, the two service directories are merged.
+                            -->
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
+                            <!--
+                            The following lines ensure that the uber-jar is created as an additional artifact, not a replacement for the
+                            bare jar (which is good because we want to use the bare jar as the job jar).
+                            -->
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>withdeps</shadedClassifierName>
                         </configuration>
@@ -108,26 +117,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!--
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-assembly-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>create-my-bundle</id>
-                  <phase>package</phase>
-                  <goals>
-                    <goal>single</goal>
-                  </goals>
-                  <configuration>
-                    <descriptorRefs>
-                      <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-            -->
         </plugins>
     </build>
 
