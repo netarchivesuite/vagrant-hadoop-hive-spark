@@ -65,9 +65,11 @@ public class CDXCountAnalyser extends Configured implements Tool {
         //Configuration conf = getConf();
         Configuration conf = new Configuration();
         conf.set("yarn.resourcemanager.address", "node1:8032");
+        conf.set("yarn.resourcemanager.hostname", "node1");
         conf.set("mapreduce.framework.name", "yarn");
         conf.set("mapreduce.jobtracker.address", "node1");   //Not sure if this is necessary
         conf.set("fs.defaultFS", "hdfs://node1:8020");
+        //conf.set("yarn.nodemanager.aux-services", "mapreduce_shuffle");
         //conf.set("hadoop.job.ugi", "vagrant");
         /*conf.set("yarn.application.classpath",
                      "$HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/*,$HADOOP_COMMON_HOME/lib/*,"
@@ -76,7 +78,8 @@ public class CDXCountAnalyser extends Configured implements Tool {
                         + "$HADOOP_MAPRED_HOME/*,$HADOOP_MAPRED_HOME/lib/*"); */
         //Why do we need the jar with dependencies? Shouldn't we be able to specify the provided dependencies (as commented
         //out above) and then just give the minimal jarfile? This could be important performance-wise in a final version
-        File file = new File("target/CDXCountAnalyser-1.0-SNAPSHOT-jar-with-dependencies.jar");
+        //File file = new File("target/CDXCountAnalyser-1.0-SNAPSHOT-jar-with-dependencies.jar");
+        File file = new File("target/CDXCountAnalyser-1.0-SNAPSHOT.jar");
         conf.set("mapreduce.job.jar", file.getAbsolutePath());
         //For below see https://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
         //but still need to check that this is necessary.
