@@ -18,8 +18,8 @@ function installRemoteHadoop {
 
 function setupHadoop {
 	echo "creating hadoop directories"
-	mkdir /var/hadoop
-	mkdir /var/hadoop/hadoop-datanode
+	mkdir -p /var/hadoop
+	mkdir -p /var/hadoop/hadoop-datanode
 
 	echo "copying over hadoop configuration files"
 	cp -f $HADOOP_RES_DIR/* $HADOOP_CONF

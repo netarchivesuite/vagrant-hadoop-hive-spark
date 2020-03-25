@@ -19,6 +19,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	    v.gui = false
         v.customize ['modifyvm', :id, '--memory', '8192']
     end
+    config.ssh.forward_agent = true
+
 
 
 

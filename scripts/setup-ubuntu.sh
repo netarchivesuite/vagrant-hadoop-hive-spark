@@ -26,11 +26,22 @@ function installSSHPass {
 	apt-get install -y sshpass
 }
 
-function overwriteSSHCopyId {
-	cp -f $RES_SSH_COPYID_MODIFIED /usr/bin/ssh-copy-id
-}
 
 function createSSHKey {
+	echo "generating ssh key"
+	ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
+	mkdir /vagrant/ssh/
+	cat ~/.ssh/id_rsa.pub >> /vagrant/ssh/authorized_keys
+	cp -f /vagrant/ssh/authorized_keys ~/.ssh/authorized_keys
+	cp -f $RES_SSH_CONFIG ~/.ssh
+	chmod go-rwx -R ~/.ssh/
+}
+
+
+function createSSHGraph {
+	ssh-copy-id vagrant@worker1
+	ssh-copy-id vagrant@worker2
+
 	echo "generating ssh key"
 	ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
 	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
