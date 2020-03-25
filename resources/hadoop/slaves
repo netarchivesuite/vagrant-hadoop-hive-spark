@@ -1,1 +1,3 @@
-node1
+worker1.hadoop.network
+worker2.hadoop.network
+worker3.hadoop.network

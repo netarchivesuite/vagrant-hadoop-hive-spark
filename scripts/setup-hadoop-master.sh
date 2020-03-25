@@ -19,7 +19,6 @@ function installRemoteHadoop {
 function setupHadoop {
 	echo "creating hadoop directories"
 	mkdir /var/hadoop
-	mkdir /var/hadoop/hadoop-datanode
 	mkdir /var/hadoop/hadoop-namenode
 	mkdir /var/hadoop/mr-history
 	mkdir /var/hadoop/mr-history/done
@@ -50,7 +49,7 @@ function formatHdfs {
 }
 
 function startDaemons {
-    /vagrant/scripts/start-hadoop.sh
+    /vagrant/scripts/start-hadoop-master.sh
 }
 
 function setupHdfs {
@@ -58,6 +57,8 @@ function setupHdfs {
     hdfs dfs -mkdir -p /user/root
     hdfs dfs -mkdir -p /user/ubuntu
     hdfs dfs -chown ubuntu /user/ubuntu
+	hdfs dfs -mkdir -p /user/vagrant
+    hdfs dfs -chown vagrat /user/vagrant
 
     echo "creating temp directories in hdfs"
     hdfs dfs -mkdir -p /tmp

@@ -2,7 +2,7 @@
 <configuration>
     <property>
         <name>yarn.resourcemanager.hostname</name>
-        <value>node1</value>
+        <value>master1.hadoop.network</value>
     </property>
     <property>
         <name>yarn.resourcemanager.webapp.address</name>
@@ -22,19 +22,19 @@
     </property>
     <property>
         <name>mapreduce.jobhistory.address</name>
-        <value>node1:10020</value>
+        <value>master1.hadoop.network:10020</value>
     </property>
     <property>
         <name>mapreduce.jobhistory.webapp.address</name>
-        <value>node1:19888</value>
+        <value>master1:19888</value>
     </property>
     <property>
         <name>yarn.log.server.url</name>
-        <value>http://node1:19888/jobhistory/logs/</value>
+        <value>http://master1.hadoop.network:19888/jobhistory/logs/</value>
     </property>
     <property>
         <name>yarn.timeline-service.hostname</name>
-        <value>node1</value>
+        <value>master1.hadoop.network</value>
     </property>
     <property>
         <name>yarn.nodemanager.delete.debug-delay-sec</name>

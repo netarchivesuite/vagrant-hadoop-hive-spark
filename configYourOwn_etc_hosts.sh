@@ -1,0 +1,4 @@
+grep -q '^10\.211\.55\.100 master1 master1.hadoop.network$' /etc/hosts || sudo bash -c 'echo "10.211.55.100 master1 master1.hadoop.network" >> /etc/hosts'
+grep -q '^10\.211\.55\.101 worker1 worker1.hadoop.network$' /etc/hosts || sudo bash -c 'echo "10.211.55.101 worker1 worker1.hadoop.network" >> /etc/hosts'
+grep -q '^10\.211\.55\.102 worker2 worker2.hadoop.network$' /etc/hosts || sudo bash -c 'echo "10.211.55.102 worker2 worker2.hadoop.network" >> /etc/hosts'
+grep -q '^10\.211\.55\.103 worker3 worker3.hadoop.network$' /etc/hosts || sudo bash -c 'echo "10.211.55.103 worker3 worker3.hadoop.network" >> /etc/hosts'

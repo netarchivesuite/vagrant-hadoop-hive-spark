@@ -5,7 +5,10 @@ source "/vagrant/scripts/common.sh"
 
 function setupHosts {
 	echo "modifying /etc/hosts file"
-        echo "127.0.0.1 node1" >> /etc/nhosts
+	echo "10.211.55.100 master1 master1.hadoop.network" >> /etc/nhosts
+	echo "10.211.55.101 worker1 worker1.hadoop.network" >> /etc/nhosts
+	echo "10.211.55.102 worker2 worker2.hadoop.network" >> /etc/nhosts
+	echo "10.211.55.103 worker3 worker3.hadoop.network" >> /etc/nhosts
 	echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4" >> /etc/nhosts
 	echo "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/nhosts
 	cp /etc/nhosts /etc/hosts
