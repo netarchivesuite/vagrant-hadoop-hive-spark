@@ -42,6 +42,7 @@ function setupUtilities {
     apt-get install -y unzip
     apt-get install -y python-minimal
     apt-get install -y curl apt-utils
+    apt-get install -y telnet less
 }
 
 echo "setup ubuntu"
