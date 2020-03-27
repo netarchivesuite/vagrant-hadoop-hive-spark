@@ -11,18 +11,20 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.PrivilegedAction;
 
 /**
  * This job counts the number of cdx records pointing to every arc- or warc-file in a given collection of
  * cdx files. Here we are just using it as a test class so give it some input files with lines that end "foobar.warc"
  * etc. or just feed it some real cdx files.
  */
-public class CDXCountAnalyser extends Configured implements Tool {
+public class CDXCountAnalyserUgi extends Configured implements Tool {
 
     static public class ArchiveFilenameCountMapper extends Mapper<LongWritable, Text, Text, LongWritable> {
         final private static LongWritable ONE = new LongWritable(1);
@@ -65,10 +67,10 @@ public class CDXCountAnalyser extends Configured implements Tool {
         System.setProperty("HADOOP_USER_NAME", "vagrant");  //Not sure if this is necessary
         Configuration conf = new Configuration();
         conf.set("yarn.resourcemanager.address", "node1:8032");
-        conf.set("yarn.resourcemanager.hostname", "node1");
+        //conf.set("yarn.resourcemanager.hostname", "node1");
         conf.set("mapreduce.framework.name", "yarn");
         conf.set("mapreduce.jobtracker.address", "node1");   //Not sure if this is necessary
-        conf.set("fs.defaultFS", "hdfs://node1:8020");
+        conf.set("fs.defaultFS", "hdfs://node1");
         File file = new File("target/CDXCountAnalyser-1.0-SNAPSHOT.jar");
         conf.set("mapreduce.job.jar", file.getAbsolutePath());
         //For below see https://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
@@ -90,7 +92,7 @@ public class CDXCountAnalyser extends Configured implements Tool {
             //SequenceFileOutputFormat.setOutputPath(job, new Path(args[1]));
         //
         if (n > 1) {
-
+            CDXCountAnalyserUgi.SimplePathFilter.filter = args[1];
             TextInputFormat.setInputPathFilter(job, SimplePathFilter.class);
         }
         if (n > 1)
@@ -110,17 +112,29 @@ public class CDXCountAnalyser extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        System.exit(ToolRunner.run(new CDXCountAnalyser(), args));
+        UserGroupInformation ugi = UserGroupInformation.createRemoteUser("vagrant");
+        ugi.doAs(new PrivilegedAction<Integer>() {
+            @Override
+            public Integer run() {
+                try {
+                    return new Integer(ToolRunner.run(new CDXCountAnalyserUgi(), args));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return -101;
+            }
+        });
     }
 
+    public static class SimplePathFilter implements PathFilter {
 
-    static class SimplePathFilter implements PathFilter {
+        public static String filter = ".*";
 
         public static void init() {};
 
         @Override
         public boolean accept(Path path) {
-            return path.getName().matches(".*");
+            return path.getName().matches(filter);
         }
     }
 }
