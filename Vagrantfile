@@ -28,7 +28,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network "forwarded_port", guest: 16010, host: 16010
     ##config.vm.network "forwarded_port", guest: 8020, host: 8020
     config.vm.define "node1" do |node|
-        node.vm.network :private_network, ip: '10.211.55.101'
+        ##node.vm.network :private_network, ip: '10.211.55.101', name: "netarkivet-net"
+        node.vm.network :private_network, type: "dhcp", name: "netarkivet-net"
         node.vm.hostname = 'node1'
         node.vm.provision :shell, path: 'scripts/setup-ubuntu.sh'
         node.vm.provision :shell, path: 'scripts/setup-java.sh'
