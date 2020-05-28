@@ -13,6 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	    d.ports = ["8088:8088","8080:8080","9083:9083","4040:4040","8888:8888","16010:16010", "8020:8020", "8032:8032"]
 	    d.name = "node1"
 	    ##d.volumes = ["/vagrant/dabdata:/dabdata"]
+	    d.volumes = ["netarchivesuitedockercompose_bitmag_files:/kbhpillar"]
       end
     config.vm.provider "virtualbox" do |v, override|
 	    override.vm.box = "ubuntu/xenial64"
